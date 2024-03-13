@@ -45,6 +45,22 @@ namespace book
         [JsonProperty(PropertyName = "title", NullValueHandling = NullValueHandling.Ignore)]
         public string Title { get; set; }
 
+        [JsonProperty(PropertyName = "author", NullValueHandling = NullValueHandling.Ignore)]
+        public string Author { get; set; }
+
+        [JsonProperty(PropertyName = "inputTokens", NullValueHandling = NullValueHandling.Ignore)]
+        public int InputTokens { get; set; }
+
+        [JsonProperty(PropertyName = "outputTokens", NullValueHandling = NullValueHandling.Ignore)]
+        public int OutputTokens { get; set; }
+
+        [JsonProperty(PropertyName = "latency", NullValueHandling = NullValueHandling.Ignore)]
+        public long Latency { get; set; }
+
+        
+
+
+
         static List<ITool> tools = new List<ITool>()
         {
             new Start(),

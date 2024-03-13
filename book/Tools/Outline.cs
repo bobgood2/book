@@ -10,7 +10,7 @@ namespace book.Tools
     {
         public void OnCompletion(Run run)
         {
-            _ = new Split(Run.Increment(run.Id), run.output, run.Id, run.info.Budget);
+            _ = new Split(Run.Increment(run.Id), run.info.Title, run.output, run.Id, run.info.Budget);
         }
 
         public Outline()

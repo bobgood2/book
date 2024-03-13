@@ -40,20 +40,26 @@ namespace book
             if (Run.Runs.IsEmpty)
             {
                 string prompt = File.ReadAllText("prompt.txt");
-                int pos = prompt.IndexOf('\n');
-                string line1 = prompt[0..pos].Trim();
-                int pos2 = line1.IndexOf(" ");
-                int budget = int.Parse(line1[0..pos2].Trim());
 
-                _ = new Outline("1", "Book", prompt[(pos+1)..], string.Empty, budget);
+                _ = new Start("1", "Review User Prompt", prompt, string.Empty);
 
             }
 
+            DateTime startTime = DateTime.Now;
             while (!Run.IsDone())
             {
                 Thread.Sleep(1000);
             }
 
+            DateTime endTime = DateTime.Now;
+            var elapsed = endTime-startTime;
+
+            using (TextWriter tw = new StreamWriter("elapsed.txt"))
+            {
+                tw.WriteLine($"elapsed time = {elapsed.TotalMinutes} minutes");
+            }
+
+            Console.WriteLine($"elapsed time = {elapsed.TotalMinutes} minutes");
             Console.WriteLine("All Work Complete");
             
         }

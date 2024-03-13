@@ -80,6 +80,10 @@ namespace book
             List<string> cleanList = new List<string>();
 
             Console.WriteLine("processing " + this.Id);
+            this.info.InputTokens = LlmHelper.GetGptTokenCount(this.prompt, this.info.Model);
+            this.info.OutputTokens = LlmHelper.GetGptTokenCount(this.output, this.info.Model);
+            this.info.Latency = response.LatencyInMilliseconds;
+
             try
             {
                 tool.OnCompletion(this);
@@ -94,6 +98,13 @@ namespace book
             {
                 log.WriteLine(output);
             }
+
+            using (TextWriter tw = new StreamWriter(Path.Combine(this.Id, "info.json")))
+            {
+                string jsonString = JsonSerializer.Serialize(info);
+                tw.WriteLine(jsonString);
+            }
+
 
             using (TextWriter log = new StreamWriter(Path.Combine(this.Id, "log.log")))
             {

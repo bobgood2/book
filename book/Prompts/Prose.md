@@ -32,5 +32,8 @@ but you should consult the more global parts of the context stack for context.<|
 <|im_start|>user
 CONTEXT_STACK
 <|im_end|>
+<|im_start|>system
+you must not create and outline unless instructed to.  You are only to write prose for a document described above.
+<|im_end|>
 <|im_start|>assistant
 

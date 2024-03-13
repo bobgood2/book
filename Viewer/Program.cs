@@ -28,18 +28,25 @@ namespace book
                 }
             }
 
-            File.Copy("HTML/script.js", Path.Combine(dst, "script.js"), true);
-            File.Copy("HTML/style.css", Path.Combine(dst, "script.css"), true);
             string html = File.ReadAllText("HTML/HtmlPage1.html");
             var parts = html.Split("CONTENT");
+
             Directory.SetCurrentDirectory(home);
             Run.Scan(false);
+
+            var top = parts[0];
+            Run r = Run.Get("1");
+            top = top.Replace("TITLE", r.info.Title);
+            top = top.Replace("AUTHOR", "By "+r.info.Author);
+
+            var bottom = parts[1];
+
             BuildHeirarchy();
             using (TextWriter tw = new StreamWriter(Path.Combine(dst, "book.html")))
             {
-                tw.WriteLine(parts[0]);
+                tw.WriteLine(top);
                 Print("book", tw);
-                tw.WriteLine(parts[1]);
+                tw.WriteLine(bottom);
             }
 
             if (args.Length == 1)
@@ -55,7 +62,7 @@ namespace book
             Run r = Run.Get(root);
             if (r == null)
             {
-                tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a> Reason");
+                tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a><span> Reason </span>");
                 Run r1 = Run.Get(root + ".1");
                 if (root == "book")
                 {
@@ -66,15 +73,20 @@ namespace book
                 if (inp != null)
                 {
                     string b = inp.Trim(); //.Replace("\n", "<br/>");
-                    tw.WriteLine("<i><br/>" + b+"<br/></i>");
+                    // <span class="toggleSpan">This is a togglable span element.</span>
+                    tw.WriteLine("<span class=\"toggleSpan\"><br/>" + b+ "</span>");
                 }
             }
             else
             {
-                tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)");
+                tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a><span> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)</span>");
                 if (r.output != null)
                 {
                     string b = r.output.Trim().Replace("\n", "<br/>");
+                    if (r.info.Tool!="Prose")
+                    {
+                        b = "<span class=\"toggleSpan\">" + b + "</span>";
+                    }    
                     tw.WriteLine("<br/>" + b +"<br/>");
                 }
             }

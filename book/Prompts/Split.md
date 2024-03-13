@@ -27,6 +27,8 @@ the third was a minor character, you might output something like the following (
 - Descibe Jack in his outward primitive style, and how this projects on people around him
 # Cashier scrubs (2000 tokens)
 - Contract that with what the cashier is wearing and how that reflects on the others.
+# General Instructions for Subsections
+always use proper names
 ```
 
 #context stack explanation
