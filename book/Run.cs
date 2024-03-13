@@ -57,7 +57,8 @@ namespace book
         public static Run? Get(string id)
         {
             if (id.IsNullOrEmpty()) return null;
-            return Runs[id];
+            if (Runs.TryGetValue(id, out var run)) return run;
+            return null;
         }
 
         static HashSet<string> executing = new HashSet<string>();
@@ -81,7 +82,7 @@ namespace book
             Console.WriteLine("processing " + this.Id);
             try
             {
-                tool.Process(this);
+                tool.OnCompletion(this);
             }
             catch (Exception ex)
             {
@@ -127,7 +128,7 @@ namespace book
             }
         }
 
-        public Run(string id)
+        public Run(string id, bool start)
         {
             this.Id = id;
             using (TextReader tr = new StreamReader(Path.Combine(id, "info.json")))
@@ -147,13 +148,15 @@ namespace book
                 this.output = File.ReadAllText(f);
             }
 
-            if (this.output == null)
+            if (this.output == null && start)
             {
                 _ = Execute();
             }
+
+            Runs[id] = this;
         }
 
-        public static void Scan()
+        public static void Scan(bool start)
         {
             List<(string path, DateTime dt)> runs = new List<(string path, DateTime dt)>();
             foreach (var d in Directory.GetDirectories(Directory.GetCurrentDirectory()))
@@ -161,14 +164,15 @@ namespace book
                 if (File.Exists(Path.Combine(d,"info.json")))
                 {
                     DateTime age = File.GetCreationTime(Path.Combine(d, "info.json"));
-                    runs.Add((Path.GetFileNameWithoutExtension(d),age));
+                    runs.Add((Path.GetFileName(d),age));
                 }
             }
 
             runs.Sort((a, b) => a.dt.CompareTo(b.dt));
+            
             foreach (var run in runs)
             {
-                new Run(run.path);
+                new Run(run.path, start);
             }
         }
 

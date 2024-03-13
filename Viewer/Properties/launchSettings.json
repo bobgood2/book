@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Viewer": {
+      "commandName": "Project",
+      "commandLineArgs": "c:\\mybook \"C:\\Users\\bobgood\\OneDrive - Microsoft\\Shared with Everyone\\mybook\""
+    }
+  }
+}

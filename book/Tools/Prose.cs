@@ -8,9 +8,8 @@ namespace book.Tools
 {
     public class Prose : ITool
     {
-        public void Process(Run run)
+        public void OnCompletion(Run run)
         {
-            _ = new Split(Run.Increment(run.Id), run.output, run.Id, run.info.Budget);
         }
 
         public Prose()
@@ -18,7 +17,7 @@ namespace book.Tools
 
         }
 
-        public Prose(string id, string input, string parent, int budget)
+        public Prose(string id, string title, string input, string parent, int budget)
         {
             var info = new RunInfo()
             {
@@ -32,6 +31,7 @@ namespace book.Tools
                 N = 1,
                 Stop = new List<string>() { "<|im_end|>" },
                 Input=input,
+                Title=title,
             };
 
             Dictionary<string, string> templates = new Dictionary<string, string>()

@@ -8,7 +8,7 @@ namespace book.Tools
 {
     public class Start : ITool
     {
-        public void Process(Run run)
+        public void OnCompletion(Run run)
         {
             throw new NotImplementedException();
         }

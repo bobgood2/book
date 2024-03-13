@@ -29,9 +29,9 @@ the third was a minor character, you might output something like the following (
 - Contract that with what the cashier is wearing and how that reflects on the others.
 ```
 
-#content stack explanation
+#context stack explanation
 You will see the history from the most global context first, with the users expectation. If you are creating an outline for the entire book
-or document, the contact stack will not contain anything else.  Otherwise, we will see the outline generated at the top level, and potentially see
+or document, the context stack will not contain anything else.  Otherwise, we will see the outline generated at the top level, and potentially see
 users notes to update or guide the process.   Then the system will translate part of the outline into sections, and you will only be able to see
 the instructions relevant to your section.  At this point you may be generating an outline from this, or you may be one or more levels further
 down the context stack.   In summary, the user is the boss and is providing guidance and different points.  the assistant is doing research and

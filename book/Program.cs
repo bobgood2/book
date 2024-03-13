@@ -2,9 +2,8 @@
 using LuToolbox;
 using System;
 using book.Tools;
-using book;
 
-namespace Book
+namespace book
 {
     internal class Program
     {
@@ -13,7 +12,7 @@ namespace Book
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("Bool <path> <- to write a book within the directory <path> or to continue a stopped job");
+                Console.WriteLine("Book <path> <- to write a book within the directory <path> or to continue a stopped job");
                 Console.WriteLine("  first create a file in that directory called 'prompt.txt'");
                 Console.WriteLine("    the first line is the budget i.e.:\n100000 tokens");
                 Console.WriteLine("    then a description of what you want written");
@@ -36,7 +35,7 @@ namespace Book
                 }        
             }
 
-            Run.Scan();
+            Run.Scan(true);
 
             if (Run.Runs.IsEmpty)
             {
@@ -46,7 +45,7 @@ namespace Book
                 int pos2 = line1.IndexOf(" ");
                 int budget = int.Parse(line1[0..pos2].Trim());
 
-                _ = new Outline("1", prompt[(pos+1)..], string.Empty, budget);
+                _ = new Outline("1", "Book", prompt[(pos+1)..], string.Empty, budget);
 
             }
 

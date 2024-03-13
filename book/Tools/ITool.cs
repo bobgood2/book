@@ -8,6 +8,6 @@ namespace book.Tools
 {
     public interface ITool
     {
-        void Process(Run run);
+        void OnCompletion(Run run);
     }
 }

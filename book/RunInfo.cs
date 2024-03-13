@@ -42,6 +42,9 @@ namespace book
         [JsonProperty(PropertyName = "input", NullValueHandling = NullValueHandling.Ignore)]
         public string Input { get; set; }
 
+        [JsonProperty(PropertyName = "title", NullValueHandling = NullValueHandling.Ignore)]
+        public string Title { get; set; }
+
         static List<ITool> tools = new List<ITool>()
         {
             new Start(),

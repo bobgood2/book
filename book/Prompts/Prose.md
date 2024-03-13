@@ -7,11 +7,13 @@ smaller you can do this in a single run.  We have split the task up into a hiera
 
 #run output
 Your run output is the first draft of a section of the document.  Every token you output will be part of the document.  It is your job to research the scope of what you have been asked to create,
-it to produce however many tokens are requested.
+it to produce however many tokens are requested.  You should be writing prose as described in the content stack,
+but you should only write prose for the most local part of the context stack, but be aware of the more global parts of the 
+context stack for general reference.
 
-#content stack explanation
+#context stack explanation
 You will see the history from the most global context first, with the users expectation. If you are creating an outline for the entire book
-or document, the contact stack will not contain anything else.  Otherwise, we will see the outline generated at the top level, and potentially see
+or document, the context stack will not contain anything else.  Otherwise, we will see the outline generated at the top level, and potentially see
 users notes to update or guide the process.   Then the system will translate part of the outline into sections, and you will only be able to see
 the instructions relevant to your section.  At this point you may be generating an outline from this, or you may be one or more levels further
 down the context stack.   In summary, the user is the boss and is providing guidance and different points.  the assistant is doing research and
@@ -25,7 +27,8 @@ You will not generate pictures, or diagrams, or make citations.  You will try to
 across sections, and maintain a consistent voice.
 
 Given the below context from the user, system, and assistant for each level of the context please generate the required number of tokens
-of prose to that will be used in the first draft of the document.<|im_end|>
+of prose to that will be used in the first draft of the document.  Your instructions are in the last or most local part of the context stack, 
+but you should consult the more global parts of the context stack for context.<|im_end|>
 <|im_start|>user
 CONTEXT_STACK
 <|im_end|>

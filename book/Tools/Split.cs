@@ -9,7 +9,8 @@ namespace book.Tools
 {
     public class Split : ITool
     {
-        public void Process(Run run)
+        static const string generalTitle = "# General Instructions for Subsections";
+        public void OnCompletion(Run run)
         {
             Dictionary<string, string> g1 = new Dictionary<string, string>();
             Dictionary<string, string> g2 = new Dictionary<string, string>();
@@ -19,14 +20,14 @@ namespace book.Tools
             {
                 if (line0.StartsWith('#'))
                 {
-                    key1 = line0;
+                    key1 = line0.Trim();
                     key2 = null;
                     g1[key1] = "";
                 }
                 else if (line0.StartsWith("##"))
 
                 {
-                    key2 = line0;
+                    key2 = line0.Trim();
                     key1 = null;
                     g2[key2] = "";
 
@@ -50,18 +51,35 @@ namespace book.Tools
             }
 
             int cnt = 0;
+
+            string general = "";
+            if (g1.TryGetValue(generalTitle, out general))
             foreach (var hdr in g1.Keys)
             {
                 var v = g1[hdr];
                 (string h1, int budget) = GetBudget(hdr);
                 string content = h1 + "\n" + v;
+                if (general!=null)
+                {
+                    content += "\n" + general;
+                }
+
                 if (budget>500)
                 {
-                    _ = new Outline(Run.Child(run.Id, cnt++), content, run.Id, budget); 
+                    _ = new Outline(Run.Child(run.Id, cnt++), hdr, content, run.Id, budget); 
+                }
+                else if (budget>0)
+                {
+                    _ = new Prose(Run.Child(run.Id, cnt++), content, run.Id, budget); 
+                }
+                else if (hdr == "# General Instructions for Subsections")
+                {
+
                 }
                 else
                 {
-                    _ = new Prose(Run.Child(run.Id, cnt++), content, run.Id, budget); )
+                    // default???
+                    _ = new Prose(Run.Child(run.Id, cnt++), content, run.Id, 200);
                 }
             }
         }
@@ -74,8 +92,8 @@ namespace book.Tools
                 int pos = h1.LastIndexOf("(");
                 var par = h1[(pos + 1)..^1];
                 h1 = h1.Substring(0, pos - 1).Trim();
-                int pos2 = h1.IndexOf(' ');
-                if (int.TryParse(h1[0..pos2], out int budget))
+                int pos2 = par.IndexOf(' ');
+                if (int.TryParse(par[0..pos2], out int budget))
                 {
                     return (h1, budget);
                 }
@@ -98,7 +116,7 @@ namespace book.Tools
 
         }
 
-        public Split(string id, string prompt, string parent, int budget)
+        public Split(string id, string title, string prompt, string parent, int budget)
         {
             var info = new RunInfo()
             {
@@ -111,6 +129,8 @@ namespace book.Tools
                 TopP = 1,
                 N = 1,
                 Stop = new List<string>() { "<|im_end|>" },
+                Input = prompt,
+                Title=title,
             };
 
             Dictionary<string, string> templates = new Dictionary<string, string>()
