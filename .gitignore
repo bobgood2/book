@@ -1,0 +1,31 @@
+# Ignore build outputs
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Tt]est[Rr]esult*/
+
+# Ignore user-specific files
+*.user
+*.userosscache
+*.suo
+
+# Ignore Visual Studio temporary files
+*.sln.docstates
+
+# Ignore ReSharper files
+_ReSharper*/
+*.resharper
+
+# Ignore VS Code directories
+.vscode/
+
+# Ignore other miscellaneous files
+*.bak
+*.swp
+*.tmp
+book/bin
+book/obj
+LlmLib/bin
+LlmLib/obj
+.vs
+
