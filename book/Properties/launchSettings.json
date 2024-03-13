@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "book": {
+      "commandName": "Project",
+      "commandLineArgs": "c:\\mybook restart"
+    }
+  }
+}
