@@ -2,7 +2,7 @@
   "profiles": {
     "Viewer": {
       "commandName": "Project",
-      "commandLineArgs": "c:\\mybook \"C:\\repos\\book\\index.html\""
+      "commandLineArgs": "c:\\mybook \"C:\\mybook\\index.html\""
     }
   }
 }
