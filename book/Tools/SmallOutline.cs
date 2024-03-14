@@ -26,7 +26,7 @@ namespace book.Tools
                 Tool = this.GetType().Name,
                 Parent = parent,
                 Model = "dev-gpt-4-turbo",
-                MaxTokens = 2000,
+                MaxTokens = 1000,
                 Temperature = .2,
                 Budget= budget,
                 TopP = 1,

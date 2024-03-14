@@ -115,7 +115,7 @@ namespace book
                   
             return $"tokens = {proseTokens:#,##0} ({proseTokens / 600} pages)<br/>"
             + $"tokens used: input {inputTokens / 1e6:0.00}M output  {outputTokens / 1e6:0.00}M<br/>"
-            + $"cost: {cost:$#,##0.00} per OpenAI pricing"
+            + $"cost: {cost:$#,##0.00} per OpenAI pricing<br/>"
             + $"Total LLM Time {(double)latency / 3600 / 1000:0.0} hours";
         }
 
