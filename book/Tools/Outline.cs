@@ -10,7 +10,7 @@ namespace book.Tools
     {
         public void OnCompletion(Run run)
         {
-            _ = new Split(Run.Increment(run.Id), run.info.Title, PromptBuilder.CreateContextStack(run, run.output + $"\n you have a budget of{run.info.Budget} tokens\n"), run.Id, run.info.Budget);
+            _ = new Split(Run.Increment(run.Id), run.info.Title, PromptBuilder.CreateContextStack(run, run.output + $"\n you have a budget of {run.info.Budget} tokens\n"), run.Id, run.info.Budget);
         }
 
         public Outline()
