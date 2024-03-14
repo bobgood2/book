@@ -68,6 +68,7 @@ namespace book
         {
             new Start(),
             new Outline(),
+            new SmallOutline(),
             new Split(),
             new Prose(),
         };

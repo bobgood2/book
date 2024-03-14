@@ -61,14 +61,24 @@ namespace book
             return null;
         }
 
+        static TaskQueue<Run> taskQueue = new TaskQueue<Run>(8);
         static HashSet<string> executing = new HashSet<string>();
         public async Task<Run> Execute()
         {
-            Console.WriteLine(DateTime.Now + " start "+this.Id + " "+this.info.Tool);
-            lock(executing)
+            lock (executing)
             {
                 executing.Add(this.Id);
             }
+            var r = this;
+            return await taskQueue.Queue(async () =>
+            {
+                return await r.DoExecute();
+            });
+        }
+
+        public async Task<Run> DoExecute()
+        {
+            Console.WriteLine(DateTime.Now + " start "+this.Id + " "+this.info.Tool);
 
             var query = new List<string> { this.prompt };
             LlmRequest requestData = LlmApiCompletionRequestHandling.CreateRequest(prompt: query, stop: string.Join(",", info.Stop),
@@ -176,6 +186,7 @@ namespace book
 
         public static void Scan(bool start)
         {
+            Console.WriteLine("Scanning");
             List<(string path, DateTime dt)> runs = new List<(string path, DateTime dt)>();
             foreach (var d in Directory.GetDirectories(Directory.GetCurrentDirectory()))
             {
@@ -187,11 +198,13 @@ namespace book
             }
 
             runs.Sort((a, b) => a.dt.CompareTo(b.dt));
-            
+
             foreach (var run in runs)
             {
                 new Run(run.path, start);
             }
+
+            Console.WriteLine("Done Scanning");
         }
 
         public static string Increment(string id)

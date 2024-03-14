@@ -2,7 +2,7 @@
   "profiles": {
     "book": {
       "commandName": "Project",
-      "commandLineArgs": "c:\\mybook"
+      "commandLineArgs": "c:\\mybook trim 3.A.2.D.1"
     }
   }
 }

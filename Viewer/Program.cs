@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using book.Tools;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Diagnostics;
 
@@ -18,15 +19,12 @@ namespace book
 
 
             home = args[0];
-            var dst = home; // @"C:\Users\bobgood\OneDrive - Microsoft\Shared with Everyone\mybook";
+            var dst = home+"\\book.html"; // @"C:\Users\bobgood\OneDrive - Microsoft\Shared with Everyone\mybook\book.html";
             if (args.Length>1)
             {
                 dst = args[1];
-                if (!Directory.Exists(dst))
-                {
-                    Directory.CreateDirectory(dst);
-                }
             }
+
 
             string html = File.ReadAllText("HTML/HtmlPage1.html");
             var parts = html.Split("CONTENT");
@@ -38,11 +36,12 @@ namespace book
             Run r = Run.Get("1");
             top = top.Replace("TITLE", r.info.Title);
             top = top.Replace("AUTHOR", "Authored By "+r.info.Author);
+            top = top.Replace("DATA", GetData());
 
             var bottom = parts[1];
 
             BuildHeirarchy();
-            using (TextWriter tw = new StreamWriter(Path.Combine(dst, "book.html")))
+            using (TextWriter tw = new StreamWriter(dst))
             {
                 tw.WriteLine(top);
                 Print("book", tw);
@@ -51,8 +50,33 @@ namespace book
 
             if (args.Length == 1)
             {
-                Process.Start(new ProcessStartInfo(Path.Combine(dst, "book.html")) { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo(dst) { UseShellExecute = true });
             }
+        }
+
+        static string GetData()
+        {
+            long inputTokens = 0;
+            long outputTokens = 0;
+            long proseTokens = 0;
+            long latency = 0;
+            double costPerInput = .06 / 1000;
+            double costPerOutput = .12 / 1000;
+            foreach (var run in Run.Runs.Values)
+            {
+                if (run.info.Tool == typeof(Prose).Name)
+                {
+                    proseTokens += run.info.OutputTokens;
+                }
+
+                outputTokens += run.info.OutputTokens;
+                inputTokens += run.info.InputTokens;
+                latency += run.info.Latency;
+            }
+            double cost = costPerInput*inputTokens + costPerOutput*outputTokens;
+            return $"tokens = {proseTokens:#,##0} ({proseTokens / 600} pages)<br/>"
+            + $"tokens used: input {inputTokens / 1e6:0.00}M output  {outputTokens / 1e6:0.00}M<br/>"
+            + $"cost: {cost:$#,##0.00} per OpenAI pricing";
         }
 
         static void Print(string root, TextWriter tw)

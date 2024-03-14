@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace book.Tools
 {
-    public class Outline : ITool
+    public class SmallOutline : ITool
     {
         const string delimeter = "\n---\n";
         public void OnCompletion(Run run)
@@ -14,12 +14,12 @@ namespace book.Tools
             _ = new Split(Run.Increment(run.Id), run.info.Title, PromptBuilder.CreateContextStack(run, run.output), run.Id, run.info.Budget);
         }
 
-        public Outline()
+        public SmallOutline()
         {
 
         }
 
-        public Outline(string id, string title, string input, string parent, int budget)
+        public SmallOutline(string id, string title, string input, string parent, int budget)
         {
             var info = new RunInfo()
             {

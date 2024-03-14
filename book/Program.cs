@@ -2,13 +2,14 @@
 using LuToolbox;
 using System;
 using book.Tools;
+using System.Text;
 
 namespace book
 {
     internal class Program
     {
         static public string home;
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             if (args.Length == 0)
             {
@@ -18,6 +19,7 @@ namespace book
                 Console.WriteLine("    then a description of what you want written");
                 Console.WriteLine();
                 Console.WriteLine("Book <path> restart  <- to restart job from scratch");
+                Console.WriteLine("Book <path> 3.A.2.D.2.C.2  <- to do one run");
 
                 return;
             }
@@ -25,6 +27,7 @@ namespace book
             PromptBuilder.Init();
 
             home = args[0];
+            string only = null;
             Directory.SetCurrentDirectory(home);
             if (args.Length > 1 && args[1] == "restart")
             {
@@ -32,10 +35,32 @@ namespace book
 
                 {
                     Directory.Delete(dir, true);
-                }        
+                }
+
+                Run.Scan(true);
+            }
+            else if (args.Length > 2 && args[1] == "trim")
+            {
+                only = args[2];
+                Run.Scan(false);
+                Trim(args[2]);
+            }
+            else if (args.Length > 1)
+            {
+                only = args[1];
+                Run.Scan(false);
+            }
+            else
+            {
+                Run.Scan(true);
             }
 
-            Run.Scan(true);
+            if (only != null)
+            {
+                Run r = Run.Get(only);
+                await r.Execute();
+                System.Diagnostics.Debugger.Break();
+            }
 
             if (Run.Runs.IsEmpty)
             {
@@ -52,7 +77,7 @@ namespace book
             }
 
             DateTime endTime = DateTime.Now;
-            var elapsed = endTime-startTime;
+            var elapsed = endTime - startTime;
 
             using (TextWriter tw = new StreamWriter("elapsed.txt"))
             {
@@ -61,7 +86,42 @@ namespace book
 
             Console.WriteLine($"elapsed time = {elapsed.TotalMinutes} minutes");
             Console.WriteLine("All Work Complete");
-            
+
+        }
+
+        static void Trim(string id)
+        {
+            Run run = Run.Get(id);
+            if (run==null)
+            {
+                throw new Exception("no " + id);
+            }
+
+            File.Delete(Path.Combine(run.Id, "output.txt"));
+            run.output = null;
+            HashSet<Run> list = new HashSet<Run>();
+            Trim(run, list);
+            foreach (var run2 in list)
+            {
+                if (run2!=run)
+                {
+                    Directory.Delete(run2.Id, true);
+                }
+            }
+        }
+
+        static void Trim(Run run, HashSet<Run> list)
+        {
+            if (list.Add(run))
+            {
+                foreach (var child in Run.Runs.Values)
+                {
+                    if (child.info.Parent == run.Id)
+                    {
+                        Trim(child, list);
+                    }
+                }
+            }
         }
     }
-}
+}           

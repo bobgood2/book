@@ -77,6 +77,9 @@ ul.tree li.open > a:not(:last-child):before {
         .button-region {
             width: 100px;
         }
+        .status-content {
+            width: 300px;
+        }
         .highlight-text {
             color: red; /* Sets the text color to red */
             font-weight: bold; /* Makes the text bold */
@@ -97,12 +100,15 @@ ul.tree li.open > a:not(:last-child):before {
             </div>
 
             <div class="button-container">
-                <button id="toggleButton" onclick="toggleVisibility()">Show Monologue</button>
+                <button id="toggleButton" onclick="toggleVisibility()">Show Author Notes</button>
             </div>
         </div>
         <div class ="header-content">
             <h1>TITLE</h1>
             <h2>AUTHOR</h2>
+         </div>
+       <div class ="status-content">
+            DATA
          </div>
    
     </div>
@@ -149,7 +155,7 @@ for (var i = 0; i < tree.length; i++) {
             document.getElementById("clickme").innerHTML = "";
      var spans = document.querySelectorAll(".toggleSpan");
     var button = document.getElementById("toggleButton");
-            var allHidden = (button.textContent === "Show Monologue") ;
+            var allHidden = (button.textContent === "Show Author Notes") ;
     // Toggle visibility based on the current state
     for (var i = 0; i < spans.length; i++) {
         if (allHidden) {
@@ -160,7 +166,7 @@ for (var i = 0; i < tree.length; i++) {
     }
 
     // Update button text
-    button.textContent = allHidden ? "Hide Monologue" : "Show Monologue";
+    button.textContent = allHidden ? "Hide Author Notes" : "Show Author Notes";
         }
     </script>
 

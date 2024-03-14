@@ -10,7 +10,7 @@ namespace book.Tools
     public class Split : ITool
     {
         const string generalTitle = "General Instructions";
-        const string delimeter = "\n---\n";
+        
         public void OnCompletion(Run run)
         {
             Dictionary<string, string> g1 = new Dictionary<string, string>();
@@ -84,19 +84,6 @@ namespace book.Tools
             { 
             }
 
-            List<string> contextStack = new List<string>();
-            for (Run r = run.GetParent(); r != null; r = r.GetParent())
-            {
-                if (r.tool is Outline)
-                {
-                    contextStack.Add(r.output.Trim());
-                }
-                else if (r.tool is Start)
-                {
-                    contextStack.Add((r.info.Input + "\n" + r.output).Trim());
-                }
-            }
-
             foreach (var hdr in g1.Keys)
             {
                 var v = g1[hdr];
@@ -113,15 +100,13 @@ namespace book.Tools
                     content += "\n" + general;
                 }
 
-                if (contextStack.Count > 0)
+                if (budget > 5000)
                 {
-                    contextStack.Reverse();
-                    content = string.Join(delimeter, contextStack) + delimeter + content;
+                    _ = new Outline(Run.Child(run.Id, cnt++), hdr, PromptBuilder.CreateContextStack(run, content), run.Id, budget);
                 }
-
-                if (budget>500)
+                else if (budget>1000)
                 {
-                    _ = new Outline(Run.Child(run.Id, cnt++), hdr, content, run.Id, budget); 
+                    _ = new SmallOutline(Run.Child(run.Id, cnt++), hdr, PromptBuilder.CreateContextStack(run, content), run.Id, budget); 
                 }
                 else if (budget>0)
                 {
