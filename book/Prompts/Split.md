@@ -6,10 +6,13 @@ As an LLM, you struggle to generate more than 500 tokens of content or consume m
 smaller you can do this in a single run.  Otherwise you must split the task up and communicate a plan to me using predefined instructions.
 
 ##run output
-You will use MD format to generate sections starting with the letter A and continuing up for each section.
-Under each section are instructions for that section that are derived from the outline you have received in the stack context.  the outine itself
-will be removed from the context stack as the stack expands, so each of the sections should include general guidance that refers to this
-section that is not already in the context.
+You will use MD format to generate sections .
+Your MD format should be only one level deep, and not include an overally header for the content.
+
+You can have one extra MD header for "# General Instructions for Subsections", which should include all information,
+additional notes etc.  Every other section header will be instructions that are derived from the outline, and will
+be used to generate content for that section.  General Instructions will applied to all sections.
+
 
 Try to customize general guidance for each section, because these sections will be
 separately sent do different LLMS, and any instructions outside of the sections will
@@ -32,7 +35,7 @@ always use proper names
 ```
 
 #context stack explanation
-You will see the history from the most global context first, with the users expectation. If you are creating an outline for the entire book
+You will see the history from the most global context first, with the users expectation. Each context in the stack is separated by a '---' line. If you are creating an outline for the entire book
 or document, the context stack will not contain anything else.  Otherwise, we will see the outline generated at the top level, and potentially see
 users notes to update or guide the process.   Then the system will translate part of the outline into sections, and you will only be able to see
 the instructions relevant to your section.  At this point you may be generating an outline from this, or you may be one or more levels further
@@ -52,6 +55,6 @@ You are not writing prose, you are translating an outline into instructions for 
 <|im_end|>
 <|im_start|>user
 CONTEXT_STACK
-please, you *must* ensure each section with a '#' character like MD format, and *always* be sure to include the budget token count for each section.<|im_end|>
+please, you *must* ensure each section with a '#' character like MD format, and *always* be sure to include the budget token count for each section. do not create a multilevel MD output.<|im_end|>
 <|im_start|>assistant
 

@@ -64,7 +64,7 @@ namespace book
         static HashSet<string> executing = new HashSet<string>();
         public async Task<Run> Execute()
         {
-            Console.WriteLine(DateTime.Now + " start "+this.Id);
+            Console.WriteLine(DateTime.Now + " start "+this.Id + " "+this.info.Tool);
             lock(executing)
             {
                 executing.Add(this.Id);
@@ -90,7 +90,13 @@ namespace book
             }
             catch (Exception ex)
             {
+                this.info.Error = "ex.Message";
                 Console.WriteLine("could not process " + this.Id);
+            }
+
+            if (this.info.Error != null)
+            {
+                Console.WriteLine($"Error {this.Id} {this.info.Error}");
             }
 
             cleanList.Add(Path.Combine(this.Id, "output.txt"));
@@ -146,6 +152,7 @@ namespace book
             {
                 string jsonString = tr.ReadToEnd();
                 this.info = JsonSerializer.Deserialize<RunInfo>(jsonString);
+                this.tool = info.GetTool();
             }
 
             using (TextReader tr = new StreamReader(Path.Combine(id, "prompt.md")))

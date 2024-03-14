@@ -48,6 +48,9 @@ namespace book
         [JsonProperty(PropertyName = "author", NullValueHandling = NullValueHandling.Ignore)]
         public string Author { get; set; }
 
+        [JsonProperty(PropertyName = "error", NullValueHandling = NullValueHandling.Ignore)]
+        public string Error { get; set; }
+
         [JsonProperty(PropertyName = "inputTokens", NullValueHandling = NullValueHandling.Ignore)]
         public int InputTokens { get; set; }
 
@@ -57,7 +60,7 @@ namespace book
         [JsonProperty(PropertyName = "latency", NullValueHandling = NullValueHandling.Ignore)]
         public long Latency { get; set; }
 
-        
+
 
 
 
@@ -66,9 +69,10 @@ namespace book
             new Start(),
             new Outline(),
             new Split(),
+            new Prose(),
         };
 
-        ITool GetTool()
+        public ITool GetTool()
         {
             foreach (var t in tools)
             {
@@ -79,7 +83,7 @@ namespace book
                 }
             }
 
-            throw new NotImplementedException();
+            throw new NotImplementedException($"Cannot find tool {this.Tool}");
         }
     }
 }

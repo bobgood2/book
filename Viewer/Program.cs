@@ -37,7 +37,7 @@ namespace book
             var top = parts[0];
             Run r = Run.Get("1");
             top = top.Replace("TITLE", r.info.Title);
-            top = top.Replace("AUTHOR", "By "+r.info.Author);
+            top = top.Replace("AUTHOR", "Authored By "+r.info.Author);
 
             var bottom = parts[1];
 
@@ -79,7 +79,14 @@ namespace book
             }
             else
             {
-                tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a><span> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)</span>");
+                if (r.info.Error != null)
+                {
+                    tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a> <span><div class=\"highlight-text\">{r.info.Error}</div></span><span> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)</span>");
+                }
+                else
+                {
+                    tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a><span> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)</span>");
+                }
                 if (r.output != null)
                 {
                     string b = r.output.Trim().Replace("\n", "<br/>");

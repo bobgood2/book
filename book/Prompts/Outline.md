@@ -6,6 +6,9 @@ As an LLM, you struggle to generate more than 500 tokens of content or consume m
 smaller you can do this in a single run.  Otherwise you must split the task up into a hierarchy of smaller pieces and have a context stack for each level of the heirarchy.
 
 #run output
+*do not* create a multilevel outline.   Have a fixed number of sections, with an explanation on what those sections will
+communicate.   If necessary, each of your sections will be further broken down into further sections.
+
 Your run output will be reanalyzed and broken up into smaller pieces in a different process.  It is your job to research the scope of what you have been asked to create
 explain in detail the outline of how it will be achieved, and to also provide instructions or insights on how subsections should be handled by other runs and to 
 remain coherent.
@@ -15,7 +18,7 @@ is small enough, or ambitions for what a section will teach.  This is not an out
 level of detail needed for a compelling book.
 
 #context stack explanation
-You will see the history from the most global context first, with the users expectation. If you are creating an outline for the entire book
+You will see the history from the most global context first, with the users expectation. Each context in the stack is separated by a '---' line. If you are creating an outline for the entire book
 or document, the context stack will not contain anything else.  Otherwise, we will see the outline generated at the top level, and potentially see
 users notes to update or guide the process.   Then the system will translate part of the outline into sections, and you will only be able to see
 the instructions relevant to your section.  At this point you may be generating an outline from this, or you may be one or more levels further
@@ -31,7 +34,7 @@ across sections, and maintain a consistent voice.
 
 Given the below context from the user, system, and assistant for each level of the context please generate 1000 or more tokens of prose to describe an outline and
 general instructions for this level.    This will be used to further breakdown and guide the process, so that another LLM with a different prompt can create the actual
-prose that will be used.
+prose that will be used.  Produce only a *single* level outline.
 <|im_end|>
 <|im_start|>user
 CONTEXT_STACK

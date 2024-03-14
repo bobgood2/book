@@ -71,33 +71,59 @@ ul.tree li.open > a:not(:last-child):before {
         .header-content {
             flex-grow: 1; /* Allows the header content to take up the remaining space */
             padding-left: 20px; /* Adds some space between the buttons and the content */
+            text-align: center; /* Centers the text */
         }
 
         .button-region {
             width: 100px;
+        }
+        .highlight-text {
+            color: red; /* Sets the text color to red */
+            font-weight: bold; /* Makes the text bold */
+            margin-bottom: 10px; /* Adds some space between the text and the button */
+            text-align: center; /* Centers the text */
+        }
+
+        .button-container {
+            text-align: center; /* Centers the button */
         }
     </style>
 </head>
 <body>
     <div class="header">
          <div class="button-region">
-<button id="toggleButton" onclick="toggleVisibility()">Hide Internal Instructions</button>
-    </div>
-    <div class ="header-content">
-    <h1>TITLE</h1>
-    <h2>AUTHOR</h2>
-    </div>
+             <div id="clickme" class="highlight-text">
+                Click the button below!
+            </div>
+
+            <div class="button-container">
+                <button id="toggleButton" onclick="toggleVisibility()">Show Monologue</button>
+            </div>
+        </div>
+        <div class ="header-content">
+            <h1>TITLE</h1>
+            <h2>AUTHOR</h2>
+         </div>
    
-</div>
-
-<div class="content">
-    <ul class="tree">
-CONTENT
-    </ul>
     </div>
 
-    <script>
+    <div class="content">
+        <ul class="tree">
+            CONTENT
+            <span class="toggleSpan"><br/>Togglespan</span>
+        </ul>
+        </div>
+
+        <script>
 var tree = document.querySelectorAll('ul.tree a:not(:last-child)');
+
+// Open all tree nodes initially
+var allNodes = document.querySelectorAll('ul.tree li');
+for (var i = 0; i < allNodes.length; i++) {
+    if (allNodes[i].querySelector('ul')) {
+        allNodes[i].classList.add('open');
+    }
+}
 for (var i = 0; i < tree.length; i++) {
     tree[i].addEventListener('click', function (e) {
         var parent = e.target.parentElement;
@@ -113,14 +139,17 @@ for (var i = 0; i < tree.length; i++) {
         }
         e.preventDefault();
     });
-
-    tree[i].parentElement.classList.add('open');
 }
+ var spans = document.querySelectorAll(".toggleSpan");
+    for (var i = 0; i < spans.length; i++) {
+            spans[i].classList.add("hidden");
+    }
 
         function toggleVisibility() {
+            document.getElementById("clickme").innerHTML = "";
      var spans = document.querySelectorAll(".toggleSpan");
     var button = document.getElementById("toggleButton");
-            var allHidden = (button.textContent === "Show Internal Instructions") ;
+            var allHidden = (button.textContent === "Show Monologue") ;
     // Toggle visibility based on the current state
     for (var i = 0; i < spans.length; i++) {
         if (allHidden) {
@@ -131,9 +160,9 @@ for (var i = 0; i < tree.length; i++) {
     }
 
     // Update button text
-    button.textContent = allHidden ? "Hide Internal Instructions" : "Show Internal Instructions";
+    button.textContent = allHidden ? "Hide Monologue" : "Show Monologue";
         }
     </script>
 
-</body>
+    </body>
 </html>

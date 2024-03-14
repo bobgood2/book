@@ -10,6 +10,7 @@ namespace book.Tools
     public class Split : ITool
     {
         const string generalTitle = "General Instructions";
+        const string delimeter = "\n---\n";
         public void OnCompletion(Run run)
         {
             Dictionary<string, string> g1 = new Dictionary<string, string>();
@@ -39,9 +40,12 @@ namespace book.Tools
                         key2 = generalTitle;
                     }
 
-                    key1 = null;
                     g2[key2] = "";
                     g2b[key2] = "";
+                    if (key1 != null)
+                    {
+                        g1[key1] += line0.Trim() + '\n';
+                    }
 
                 }
                 else if (line0.Trim().Length > 0 && line0[0] == '-')
@@ -80,18 +84,39 @@ namespace book.Tools
             { 
             }
 
+            List<string> contextStack = new List<string>();
+            for (Run r = run.GetParent(); r != null; r = r.GetParent())
+            {
+                if (r.tool is Outline)
+                {
+                    contextStack.Add(r.output.Trim());
+                }
+                else if (r.tool is Start)
+                {
+                    contextStack.Add((r.info.Input + "\n" + r.output).Trim());
+                }
+            }
+
             foreach (var hdr in g1.Keys)
             {
                 var v = g1[hdr];
                 (string h1, int budget) = GetBudget(hdr);
                 if (v.Length==0)
                 {
+                    run.info.Error = $"could not instructions for {hdr}";
+
                     v = g1b[hdr];
                 }
                 string content = h1 + "\n" + v;
                 if (general!=null)
                 {
                     content += "\n" + general;
+                }
+
+                if (contextStack.Count > 0)
+                {
+                    contextStack.Reverse();
+                    content = string.Join(delimeter, contextStack) + delimeter + content;
                 }
 
                 if (budget>500)
@@ -108,8 +133,9 @@ namespace book.Tools
                 }
                 else
                 {
+                    run.info.Error = $"could not find token count for {hdr}";
                     // default???
-                    _ = new Prose(Run.Child(run.Id, cnt++), hdr, content, run.Id, 200);
+                    //_ = new Prose(Run.Child(run.Id, cnt++), hdr, content, run.Id, 200);
                 }
             }
         }
