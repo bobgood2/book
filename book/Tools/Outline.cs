@@ -8,10 +8,9 @@ namespace book.Tools
 {
     public class Outline : ITool
     {
-        const string delimeter = "\n---\n";
         public void OnCompletion(Run run)
         {
-            _ = new Split(Run.Increment(run.Id), run.info.Title, PromptBuilder.CreateContextStack(run, run.output), run.Id, run.info.Budget);
+            _ = new Split(Run.Increment(run.Id), run.info.Title, PromptBuilder.CreateContextStack(run, run.output + $"\n you have a budget of{run.info.Budget} tokens\n"), run.Id, run.info.Budget);
         }
 
         public Outline()
@@ -26,7 +25,7 @@ namespace book.Tools
                 Tool = this.GetType().Name,
                 Parent = parent,
                 Model = "dev-gpt-4-turbo",
-                MaxTokens = 2000,
+                MaxTokens = 1000,
                 Temperature = .2,
                 Budget= budget,
                 TopP = 1,

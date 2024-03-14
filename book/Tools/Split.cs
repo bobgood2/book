@@ -100,7 +100,7 @@ namespace book.Tools
                     content += "\n" + general;
                 }
 
-                if (budget > 5000)
+                if (budget > 4000)
                 {
                     _ = new Outline(Run.Child(run.Id, cnt++), hdr, PromptBuilder.CreateContextStack(run, content), run.Id, budget);
                 }
@@ -164,7 +164,7 @@ namespace book.Tools
                 Tool = this.GetType().Name,
                 Parent = parent,
                 Model = "dev-gpt-4-turbo",
-                MaxTokens = 2000,
+                MaxTokens = 500,
                 Temperature = 0,
                 Budget = budget,
                 TopP = 1,
@@ -176,39 +176,12 @@ namespace book.Tools
 
             Dictionary<string, string> templates = new Dictionary<string, string>()
             {
-                {"CONTEXT_STACK", BuildContextStack(parent) },
+                {"CONTEXT_STACK", prompt},
             };
 
             var run = new Run(id, info, PromptBuilder.Build(info.Tool, templates), this);
             _ = run.Execute();
         }
 
-        public static string BuildContextStack(string id)
-        {
-            List<Run> stack = new List<Run>();
-            Run first = Run.Get(id);
-            for (Run parent = first; parent != null; parent = parent.GetParent())
-            {
-                if (parent.info.Tool == typeof(Outline).Name)
-                {
-                    stack.Add(parent);
-                }
-            }
-
-            stack.Reverse();
-            var root = stack.First();
-            string result = root.info.Input;
-            foreach (var level in stack)
-            {
-                result += "<|im_end|>\n";
-                result += "<|im_start|>assistant\n";
-                result += level.output + "\n";
-            }
-            result += "<|im_end|>\n";
-            result += "<|im_start|>user\n";
-
-            result += $"you have a budget of {first.info.Budget} tokens\n";
-            return result;
-        }
     }
 }

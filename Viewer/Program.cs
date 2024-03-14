@@ -1,4 +1,5 @@
 ﻿using book.Tools;
+using Microsoft.IdentityModel.Abstractions;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Diagnostics;
@@ -54,14 +55,40 @@ namespace book
             }
         }
 
+        class LLMStat
+        {
+            public long inputTokens;
+            public long outputTokens;
+            public double costPerInput;
+            public double costPerOutput;
+
+            public double Cost()
+            {
+                return costPerOutput * outputTokens + costPerInput * inputTokens;
+            }
+        }
+
         static string GetData()
         {
+            Dictionary<string, LLMStat> models = new Dictionary<string, LLMStat>
+            {
+                { "dev-gpt4-32k", new LLMStat
+                    {
+                    costPerInput= .06 / 1000,
+                    costPerOutput= .12 / 1000,
+                    }
+                },
+                { "dev-gpt-4-turbo", new LLMStat
+                    {
+                    costPerInput= .03 / 1000,
+                    costPerOutput= .06 / 1000,
+                    }
+                },
+            };
             long inputTokens = 0;
             long outputTokens = 0;
             long proseTokens = 0;
             long latency = 0;
-            double costPerInput = .06 / 1000;
-            double costPerOutput = .12 / 1000;
             foreach (var run in Run.Runs.Values)
             {
                 if (run.info.Tool == typeof(Prose).Name)
@@ -69,11 +96,23 @@ namespace book
                     proseTokens += run.info.OutputTokens;
                 }
 
+                if (models.TryGetValue(run.info.Model, out LLMStat lLMStat))
+                {
+                    lLMStat.outputTokens += run.info.OutputTokens;
+                    lLMStat.inputTokens += run.info.InputTokens;
+                }
+                else throw new Exception();
+
                 outputTokens += run.info.OutputTokens;
                 inputTokens += run.info.InputTokens;
                 latency += run.info.Latency;
             }
-            double cost = costPerInput*inputTokens + costPerOutput*outputTokens;
+            double cost = 0;
+            foreach (var v in models.Values)
+            {
+                cost += v.Cost();
+            }   
+                  
             return $"tokens = {proseTokens:#,##0} ({proseTokens / 600} pages)<br/>"
             + $"tokens used: input {inputTokens / 1e6:0.00}M output  {outputTokens / 1e6:0.00}M<br/>"
             + $"cost: {cost:$#,##0.00} per OpenAI pricing"
@@ -85,9 +124,18 @@ namespace book
             List<string> children = null;
             heirarchy.TryGetValue(root, out children);
             Run r = Run.Get(root);
+
+            if (r == null && children!= null && children.Count==1)
+            {
+                root = children[0];
+                // skip a level if it is an empty header with only a single child
+                r = Run.Get(root);
+                children = null;
+            }
+
             if (r == null)
             {
-                tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a><span> Reason </span>");
+                tw.WriteLine($"<li><span class=\"treeSpan\"><a href=\"#\"><u class=\"treeSpan\">{root}</u></a><span> Reason </span></span>");
                 Run r1 = Run.Get(root + ".1");
                 if (root == "book")
                 {
@@ -106,11 +154,11 @@ namespace book
             {
                 if (r.info.Error != null)
                 {
-                    tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a> <span><div class=\"highlight-text\">{r.info.Error}</div></span><span> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)</span>");
+                    tw.WriteLine($"<li><span class=\"treeSpan\"><a href=\"#\"><u class=\"treeSpan\">{root}</u></a> <span><div class=\"highlight-text\">{r.info.Error}</div></span><span> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)</span></span>");
                 }
                 else
                 {
-                    tw.WriteLine($"<li><a href=\"#\"><b>{root}</b></a><span> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)</span>");
+                    tw.WriteLine($"<li><span class=\"treeSpan\"><a href=\"#\"><u class=\"treeSpan\">{root}</u></a><span> {r.info.Title} ({r.info.Tool} {r.info.Budget} tokens)</span></span>");
                 }
                 if (r.output != null)
                 {

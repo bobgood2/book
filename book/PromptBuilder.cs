@@ -63,14 +63,14 @@ namespace book
             var totalBudget = Run.Get("2").info.Budget;
             double pct = 100 * (double)run.info.Budget / totalBudget;
             string prefix = "";
-            string pcts = $"{pct * 100:0}%";
+            string pcts = $"{pct:0}%";
             if (pct < .4)
             {
-                pcts = $"{pct * 100:0.00}%";
+                pcts = $"{pct:0.00}%";
             }
             else if (pct < 3)
             {
-                pcts = $"{pct * 100:0.00}%";
+                pcts = $"{pct:0.00}%";
             }
             if (level == 0)
             {
@@ -82,7 +82,7 @@ namespace book
             }
             else
             {
-                prefix = $"This is the context for level {level} of the document you are helping create, where higher levels are more global. This section represents {pcts} of the whole document.   Do not generate this section.";
+                prefix = $"This is the context for level {level} of the document you are helping create, where higher levels are more global. This section represents {pcts} of the whole document.   Do not generate this section.\n\n";
             }
 
             return prefix + output.Trim();
@@ -91,7 +91,7 @@ namespace book
 
         public static string CreateContextStack(Run run, string content)
         {
-            const string delimeter = "\n---\n";
+            const string delimeter = "\n\n---\n\n";
             List<string> contextStack = new List<string>();
             int level = 0;
 

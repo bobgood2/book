@@ -59,7 +59,7 @@ namespace book
             {
                 Run r = Run.Get(only);
                 await r.Execute();
-                System.Diagnostics.Debugger.Break();
+            
             }
 
             if (Run.Runs.IsEmpty)
