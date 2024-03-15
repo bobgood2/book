@@ -60,15 +60,10 @@ namespace book
         [JsonProperty(PropertyName = "latency", NullValueHandling = NullValueHandling.Ignore)]
         public long Latency { get; set; }
 
-
-
-
-
         static List<ITool> tools = new List<ITool>()
         {
             new Start(),
             new Outline(),
-            new SmallOutline(),
             new Split(),
             new Prose(),
         };

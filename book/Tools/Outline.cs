@@ -13,6 +13,26 @@ namespace book.Tools
             _ = new Split(Run.Increment(run.Id), run.info.Title, PromptBuilder.CreateContextStack(run, run.output + $"\n you have a budget of {run.info.Budget} tokens\n"), run.Id, run.info.Budget);
         }
 
+        public string GetPrompt(RunInfo info)
+        {
+            if (info.Budget >= 4000)
+            {
+                return "Outline";
+            }
+            else if (info.Budget >= 2300)
+            {
+                return "Outline5";
+            }
+            else if (info.Budget >= 1600)
+            {
+                return "Outline3";
+            }
+            else
+            {
+                return "Outline2";
+            }
+        }
+
         public Outline()
         {
 
@@ -41,7 +61,7 @@ namespace book.Tools
                 {"CONTEXT_STACK", input },
             };
 
-            var run = new Run(id, info, PromptBuilder.Build(info.Tool, templates), this);
+            var run = new Run(id, info, PromptBuilder.Build(GetPrompt(info), templates), this);
             _ = run.Execute();
         }
 

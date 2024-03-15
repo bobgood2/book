@@ -12,6 +12,11 @@ namespace book.Tools
         {
         }
 
+        public string GetPrompt(RunInfo info)
+        {
+            return this.GetType().Name;
+        }
+
         public Prose()
         {
 
@@ -39,7 +44,7 @@ namespace book.Tools
                 {"CONTEXT_STACK", input },
             };
 
-            var run = new Run(id, info, PromptBuilder.Build(info.Tool, templates), this);
+            var run = new Run(id, info, PromptBuilder.Build(GetPrompt(info), templates), this);
             _ = run.Execute();
         }
 

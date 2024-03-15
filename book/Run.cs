@@ -78,7 +78,7 @@ namespace book
 
         public async Task<Run> DoExecute()
         {
-            Console.WriteLine(DateTime.Now + " start "+this.Id + " "+this.info.Tool);
+            Console.WriteLine(DateTime.Now + " start "+this.Id + " "+this.info.Tool + " "+this.info.Budget);
 
             var query = new List<string> { this.prompt };
             LlmRequest requestData = LlmApiCompletionRequestHandling.CreateRequest(prompt: query, stop: string.Join(",", info.Stop),
@@ -162,6 +162,14 @@ namespace book
             {
                 string jsonString = tr.ReadToEnd();
                 this.info = JsonSerializer.Deserialize<RunInfo>(jsonString);
+                if (this.info.Tool == "VerySmallOutline")
+                {
+                    this.info.Tool = "Outline";
+                }
+                if (this.info.Tool == "SmallOutline")
+                {
+                    this.info.Tool = "Outline";
+                }
                 this.tool = info.GetTool();
             }
 

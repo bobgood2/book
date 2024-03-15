@@ -82,6 +82,11 @@ namespace book.Tools
             run.info.Budget = budget;
         }
 
+        public string GetPrompt(RunInfo info)
+        {
+            return this.GetType().Name;
+        }
+
         public Start()
         {
 
@@ -108,7 +113,7 @@ namespace book.Tools
                 {"CONTEXT_STACK", prompt },
             };
 
-            var run = new Run(id, info, PromptBuilder.Build("start", templates), this);
+            var run = new Run(id, info, PromptBuilder.Build(GetPrompt(info), templates), this);
             _ = run.Execute();
         }
 

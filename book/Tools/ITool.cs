@@ -9,5 +9,6 @@ namespace book.Tools
     public interface ITool
     {
         void OnCompletion(Run run);
+        string GetPrompt(RunInfo info);
     }
 }

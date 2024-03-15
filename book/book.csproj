@@ -31,7 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Prompts\SmallOutline.md">
+    <None Update="Prompts\Outline3.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Prompts\Outline2.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Prompts\Outline5.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Prompts\Prose.md">

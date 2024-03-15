@@ -100,13 +100,9 @@ namespace book.Tools
                     content += "\n" + general;
                 }
 
-                if (budget > 4000)
+                if (budget > 1000)
                 {
                     _ = new Outline(Run.Child(run.Id, cnt++), hdr, PromptBuilder.CreateContextStack(run, content), run.Id, budget);
-                }
-                else if (budget>1000)
-                {
-                    _ = new SmallOutline(Run.Child(run.Id, cnt++), hdr, PromptBuilder.CreateContextStack(run, content), run.Id, budget); 
                 }
                 else if (budget>0)
                 {
@@ -123,6 +119,11 @@ namespace book.Tools
                     //_ = new Prose(Run.Child(run.Id, cnt++), hdr, content, run.Id, 200);
                 }
             }
+        }
+
+        public string GetPrompt(RunInfo info)
+        {
+            return this.GetType().Name;
         }
 
         private (string hdr, int budget) GetBudget(string hdr)
@@ -179,7 +180,7 @@ namespace book.Tools
                 {"CONTEXT_STACK", prompt},
             };
 
-            var run = new Run(id, info, PromptBuilder.Build(info.Tool, templates), this);
+            var run = new Run(id, info, PromptBuilder.Build(GetPrompt(info), templates), this);
             _ = run.Execute();
         }
 
