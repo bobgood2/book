@@ -33,6 +33,7 @@ namespace book
 
             if (args.Length > 1 && args[1] == "restart")
             {
+                System.Diagnostics.Debugger.Break();
                 foreach (var dir in Directory.GetDirectories(home))
 
                 {

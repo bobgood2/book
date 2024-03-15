@@ -38,6 +38,7 @@ namespace book
             top = top.Replace("TITLE", r.info.Title);
             top = top.Replace("AUTHOR", "Authored By "+r.info.Author);
             top = top.Replace("DATA", GetData());
+            Console.WriteLine(GetData());
 
             var bottom = parts[1];
 
