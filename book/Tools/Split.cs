@@ -4,13 +4,14 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace book.Tools
 {
     public class Split : ITool
     {
         const string generalTitle = "General Instructions";
-        
+
         public void OnCompletion(Run run)
         {
             Dictionary<string, string> g1 = new Dictionary<string, string>();
@@ -24,7 +25,8 @@ namespace book.Tools
                 if (line0.StartsWith('#'))
                 {
                     key1 = line0[1..].Trim();
-                    if (key1.StartsWith(generalTitle)) {
+                    if (key1.StartsWith(generalTitle))
+                    {
                         key1 = generalTitle;
                     }
 
@@ -36,7 +38,8 @@ namespace book.Tools
 
                 {
                     key2 = line0[2..].Trim();
-                    if (key2.StartsWith(generalTitle)) {
+                    if (key2.StartsWith(generalTitle))
+                    {
                         key2 = generalTitle;
                     }
 
@@ -58,7 +61,8 @@ namespace book.Tools
                     {
                         g2[key2] += line0.Trim() + '\n';
                     }
-                } else if (line0.Trim().Length>0)
+                }
+                else if (line0.Trim().Length > 0)
                 {
                     if (key1 != null)
                     {
@@ -81,21 +85,34 @@ namespace book.Tools
 
             string general = "";
             if (!g1.TryGetValue(generalTitle, out general))
-            { 
+            {
             }
+
+            int total = 0;
+            foreach (var hdr in g1.Keys)
+            {
+                var v = g1[hdr];
+                (string h1, int budget) = GetBudget(hdr);
+                total += budget;
+            }
+
+            double factor = (double)run.info.Budget / total;
 
             foreach (var hdr in g1.Keys)
             {
                 var v = g1[hdr];
                 (string h1, int budget) = GetBudget(hdr);
-                if (v.Length==0)
+                if (v.Length == 0)
                 {
                     run.info.Error = $"could not instructions for {hdr}";
 
                     v = g1b[hdr];
                 }
+
+                budget = (int)(Math.Round(factor * budget/100)*100);
+
                 string content = h1 + "\n" + v;
-                if (general!=null)
+                if (general != null)
                 {
                     content += "\n" + general;
                 }
@@ -104,9 +121,9 @@ namespace book.Tools
                 {
                     _ = new Outline(Run.Child(run.Id, cnt++), hdr, PromptBuilder.CreateContextStack(run, content), run.Id, budget);
                 }
-                else if (budget>0)
+                else if (budget > 0)
                 {
-                    _ = new Prose(Run.Child(run.Id, cnt++), hdr, content, run.Id, budget); 
+                    _ = new Prose(Run.Child(run.Id, cnt++), hdr, content, run.Id, budget);
                 }
                 else if (hdr == generalTitle)
                 {
@@ -172,7 +189,7 @@ namespace book.Tools
                 N = 1,
                 Stop = new List<string>() { "<|im_end|>" },
                 Input = prompt,
-                Title=title,
+                Title = title,
             };
 
             Dictionary<string, string> templates = new Dictionary<string, string>()

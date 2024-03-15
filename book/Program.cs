@@ -28,7 +28,9 @@ namespace book
 
             home = args[0];
             string only = null;
+            string after = null;
             Directory.SetCurrentDirectory(home);
+
             if (args.Length > 1 && args[1] == "restart")
             {
                 foreach (var dir in Directory.GetDirectories(home))
@@ -43,7 +45,13 @@ namespace book
             {
                 only = args[2];
                 Run.Scan(false);
-                Trim(args[2]);
+                Trim(args[2], false);
+            }
+            else if (args.Length > 2 && args[1] == "after")
+            {
+                after = args[2];
+                Run.Scan(false);
+                Trim(args[2], true);
             }
             else if (args.Length > 1)
             {
@@ -59,7 +67,14 @@ namespace book
             {
                 Run r = Run.Get(only);
                 await r.Execute();
-            
+
+            }
+
+            if (after != null)
+            {
+                Run r = Run.Get(after);
+
+                r.tool.OnCompletion(r);
             }
 
             if (Run.Runs.IsEmpty)
@@ -89,21 +104,25 @@ namespace book
 
         }
 
-        static void Trim(string id)
+        static void Trim(string id, bool after)
         {
             Run run = Run.Get(id);
-            if (run==null)
+            if (run == null)
             {
                 throw new Exception("no " + id);
             }
 
-            File.Delete(Path.Combine(run.Id, "output.txt"));
-            run.output = null;
+            if (!after)
+            {
+                File.Delete(Path.Combine(run.Id, "output.txt"));
+                run.output = null;
+            }
+
             HashSet<Run> list = new HashSet<Run>();
             Trim(run, list);
             foreach (var run2 in list)
             {
-                if (run2!=run)
+                if (run2 != run)
                 {
                     Directory.Delete(run2.Id, true);
                 }
@@ -124,4 +143,4 @@ namespace book
             }
         }
     }
-}           
+}
