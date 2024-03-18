@@ -1,0 +1,13 @@
+﻿Expository: This style is used to explain, describe, or inform. It's factual and straightforward, often used in non-fiction books, textbooks, or academic writing. You might use this style for sections of the book that provide background information or detailed explanations of concepts.
+
+Narrative: This style is storytelling-based, used in novels, short stories, and biographies. It can include elements like character development, plot, and setting. If you want a section of the book to advance the story or develop characters, this is the style to choose.
+
+Descriptive: This style focuses on painting a picture with words, using sensory details to bring scenes, objects, or characters to life. It's often used in conjunction with narrative or expository writing to add depth and vividness.
+
+Persuasive: This style aims to convince or persuade the reader of a particular point of view or argument. It's commonly used in opinion pieces, editorials, and persuasive essays. If a section of the book is meant to sway the reader's opinion or argue a point, this is the appropriate style.
+
+Dialog: This style involves writing conversations between characters. It's a key component of narrative writing and is essential for character development and plot advancement. Specify this style if you want the LLM to generate a conversation or interaction between characters.
+
+Reflective: This style involves exploring and reflecting on personal experiences or thoughts. It's often used in memoirs, journals, and personal essays. If a section of the book is introspective or contemplative, this style would be suitable.
+
+Analytical: This style is used to break down and analyze information, often found in academic or technical writing. It involves examining components, identifying relationships, and drawing conclusions. Use this style for sections that require critical thinking and analysis.

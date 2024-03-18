@@ -46,6 +46,9 @@
     <None Update="Prompts\Outline.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Prompts\ProseStyle.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Prompts\Split.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

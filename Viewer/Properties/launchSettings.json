@@ -2,7 +2,7 @@
   "profiles": {
     "Viewer": {
       "commandName": "Project",
-      "commandLineArgs": "c:\\mybook \"C:\\Users\\bobgood\\OneDrive - Microsoft\\Shared with Everyone\\mybook\\book.html\""
+      "commandLineArgs": "c:\\jiarubook \"C:\\Users\\bobgood\\OneDrive - Microsoft\\Shared with Everyone\\mybook\\jiarubook.html\""
     }
   }
 }
